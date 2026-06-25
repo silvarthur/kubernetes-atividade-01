@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-list-deployment # review
+  namespace: todolist-grupo-01
+  labels:
+    app: todo-list
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: todo-list-app
+  template:
+    metadata:
+      labels:
+        component: todo-list-app
+    spec:
+      containers:
+        - name: todo-list-app
+          image: andreffcastro/k8s-todolist:1.0.0
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: todo-list-app-data
+              mountPath: /data
+      volumes:
+        - name: todo-list-app-data
+          persistentVolumeClaim:
+            claimName: todo-list-pvc
