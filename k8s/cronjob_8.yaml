@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
             - name: cleanup
-              image: curlimages/curl:8
+              image: curlimages/curl:8.21.0
               env:
                 - name: CLEANUP_TOKEN
                   valueFrom:
