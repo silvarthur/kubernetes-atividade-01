@@ -12,7 +12,7 @@ Verificar se o cluster foi criado:
 
 ```bash
 kind get clusters
-kubectl cluster-info --context kind-devops-labs
+kubectl cluster-info --context kind-kubernetes-atividade-01
 ```
 
 ## 2. Instalar o Ingress Controller (NGINX)
