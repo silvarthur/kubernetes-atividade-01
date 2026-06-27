@@ -18,11 +18,23 @@ spec:
       containers:
         - name: todo-list-app
           image: andreffcastro/k8s-todolist:1.0.0
+          envFrom:
+            - configMapRef:
+                name: todo-list-config
+            - secretRef:
+                name: todo-list-secret
           ports:
-            - containerPort: 3000
+            - containerPort: 5000
           volumeMounts:
             - name: todo-list-app-data
               mountPath: /data
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 64m
+              memory: 128Mi
       volumes:
         - name: todo-list-app-data
           persistentVolumeClaim:

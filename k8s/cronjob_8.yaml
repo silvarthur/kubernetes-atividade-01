@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: todo-list-cleanup
+  namespace: todolist-grupo-01
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: cleanup
+              image: curlimages/curl:8
+              env:
+                - name: CLEANUP_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: todo-list-secret
+                      key: CLEANUP_TOKEN
+              command:
+                - /bin/sh
+                - -c
+                - 'curl -sf -X POST -H "X-Cleanup-Token: $CLEANUP_TOKEN" http://cluster-ip-service/cleanup'
+          restartPolicy: OnFailure
