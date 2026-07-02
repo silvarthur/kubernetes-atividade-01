@@ -35,6 +35,18 @@ spec:
             requests:
               cpu: 64m
               memory: 128Mi
+          livenessProbe:
+            httpGet: 
+              path: /healthz
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet: 
+              path: /healthz
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
       volumes:
         - name: todo-list-app-data
           persistentVolumeClaim:
