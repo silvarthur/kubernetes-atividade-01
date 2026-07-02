@@ -57,20 +57,29 @@ kubectl apply -f k8s/persistent-volume-claim_4.yaml
 # 5 - Service (ClusterIP)
 kubectl apply -f k8s/cluster-ip-service_5.yaml
 
-# 6 - Deployment
-kubectl apply -f k8s/deployment_6.yaml
+# 6 - Service Account
+kubectl apply -f k8s/service-account_6.yaml
 
-# 7 - Ingress
-kubectl apply -f k8s/ingress-service_7.yaml
+# 7 - Role
+kubectl apply -f k8s/role_7.yaml
 
-# 8 - CronJob (limpeza a cada 5 min)
-kubectl apply -f k8s/cronjob_8.yaml
+# 8 - Role Binding
+kubectl apply -f k8s/role-binding_8.yaml
 
-# 9 - HorizontalPodAutoscaler
-kubectl apply -f k8s/hpa_9.yaml
+# 9 - Deployment
+kubectl apply -f k8s/deployment_9.yaml
 
-# 10 - PodDisruptionBudget
-kubectl apply -f k8s/pdb_10.yaml
+# 10 - Ingress
+kubectl apply -f k8s/ingress-service_10.yaml
+
+# 11 - CronJob (limpeza a cada 5 min)
+kubectl apply -f k8s/cronjob_11.yaml
+
+# 12 - HorizontalPodAutoscaler
+kubectl apply -f k8s/hpa_12.yaml
+
+# 13 - PodDisruptionBudget
+kubectl apply -f k8s/pdb_13.yaml
 ```
 
 ## 5. Configurar o acesso local
@@ -91,9 +100,19 @@ kubectl get configmap -n todolist-grupo-01
 kubectl get secret -n todolist-grupo-01
 kubectl get ingress -n todolist-grupo-01
 kubectl get cronjob -n todolist-grupo-01
+
+kubectl get deployment,hpa,pdb,sa,role,rolebinding -n todolist-grupo-01
 ```
 
-## 7. Deletar o cluster
+## 7. Verificar permissões
+
+```bash
+kubectl auth can-i get pods --as=system:serviceaccount:todolist-grupo-01:todo-list-sa -n todolist-grupo-01
+
+kubectl auth can-i delete pods --as=system:serviceaccount:todolist-grupo-01:todo-list-sa -n todolist-grupo-01
+```
+
+## 8. Deletar o cluster
 
 ```bash
 kind delete cluster --name kubernetes-atividade-01

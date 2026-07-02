@@ -15,6 +15,7 @@ spec:
       labels:
         component: todo-list-app
     spec:
+      serviceAccountName: todo-list-sa
       containers:
         - name: todo-list-app
           image: andreffcastro/k8s-todolist:1.1.0
