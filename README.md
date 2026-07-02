@@ -30,7 +30,15 @@ kubectl wait --namespace ingress-nginx \
   --timeout=90s
 ```
 
-## 3. Aplicar os manifests (ordem correta)
+## 3. Instalar o Metrics Server (necessário para o HPA)
+
+```bash
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl patch -n kube-system deployment metrics-server --type=json \
+  -p '[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
+```
+
+## 4. Aplicar os manifests (ordem correta)
 
 ```bash
 # 1 - Namespace
@@ -57,9 +65,15 @@ kubectl apply -f k8s/ingress-service_7.yaml
 
 # 8 - CronJob (limpeza a cada 5 min)
 kubectl apply -f k8s/cronjob_8.yaml
+
+# 9 - HorizontalPodAutoscaler
+kubectl apply -f k8s/hpa_9.yaml
+
+# 10 - PodDisruptionBudget
+kubectl apply -f k8s/pdb_10.yaml
 ```
 
-## 4. Configurar o acesso local
+## 5. Configurar o acesso local
 
 Adicionar a entrada no `/etc/hosts`:
 
@@ -69,7 +83,7 @@ echo "127.0.0.1 todolist-grupo-01.local" | sudo tee -a /etc/hosts
 
 Acessar a aplicação em: http://todolist-grupo-01.local
 
-## 5. Verificar o ambiente
+## 6. Verificar o ambiente
 
 ```bash
 kubectl get all -n todolist-grupo-01
@@ -79,7 +93,7 @@ kubectl get ingress -n todolist-grupo-01
 kubectl get cronjob -n todolist-grupo-01
 ```
 
-## 6. Deletar o cluster
+## 7. Deletar o cluster
 
 ```bash
 kind delete cluster --name kubernetes-atividade-01
